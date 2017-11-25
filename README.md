@@ -10,5 +10,31 @@ environment based on Ubuntu 14.04.
 
 ## Quick start
 
-XXX - write-me
+### Ensure that you have enabled docker on your system
+
+Installing and configuration docker is left as an exercize for the reader.
+
+### Download the bitbake_ml script
+
+Download the bitbake_ml script, make it executable and put it in your path.
+
+```
+$ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-3/bitbake_ml
+$ chmod +x bitbake_ml
+```
+
+### Use bitbake_ml
+
+Wherever you would use
+```
+$ . oe-env.sh
+$ bitbake mlinux-base-image
+```
+
+Use the bitbake_ml command instead:
+
+```
+$ bitbake_ml mlinux-base-image
+```
+
 
