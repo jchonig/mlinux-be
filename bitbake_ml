@@ -1,0 +1,19 @@
+#!/bin/sh -x
+
+# Container is named mlinux-N where N is the major version
+CONTAINER=jchonig/mlinux-be:$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
+
+# Make sure we have the container
+docker pull ${CONTAINER} || exit $?
+
+# It's necessary to pass our symbolic and numeric user and group info
+# to the container so the run script will work properly.
+docker run -it \
+       -e BUILD_USER=${USER} \
+       -e BUILD_GROUP=$(groups | cut -d' ' -f1) \
+       -e BUILD_UID=$(id -u) \
+       -e BUILD_GID=$(id -g) \
+       -e BUILD_DIR=${PWD} \
+       -v ${PWD}:${PWD} \
+       ${CONTAINER} \
+       ${*}
