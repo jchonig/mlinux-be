@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Container is named mlinux-N where N is the major version
 CONTAINER=jchonig/mlinux-be:$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
