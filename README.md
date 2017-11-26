@@ -24,7 +24,7 @@ The following instructions were modified from the [mLinux git README](http://git
     cd mlinux-3.0.0
 
     # checkout desired branch or tag
-    git checkout 3.0.0
+    git checkout 3.3.13
 
     # initialize git submodules and setup dir structure
     ./setup.sh
@@ -68,5 +68,3 @@ Use the bitbake_ml command instead:
 ```
 $ bitbake_ml mlinux-base-image
 ```
-
-
