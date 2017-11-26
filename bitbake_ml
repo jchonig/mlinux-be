@@ -1,7 +1,14 @@
 #!/bin/sh
 
 # Container is named mlinux-N where N is the major version
-CONTAINER=jchonig/mlinux-be:$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
+MLINUX_VERSION=$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
+if [ -z "${MLINUX_VERSION}" ]; then
+    MLINUX_VERSION=$(git status --ignore-submodules -b | sed -nr '/^HEAD/s/HEAD detached at ([0-9]+)\..*/mlinux-\1/p')
+fi
+if [ -z "${MLINUX_VERSION}" ]; then
+    echo "Unable to determine mLinux version from directory name or git" >&2; exit 1
+fi
+CONTAINER=jchonig/mlinux-be:${MLINUX_VERSION}
 
 # Make sure we have the container
 docker pull ${CONTAINER} || exit $?
