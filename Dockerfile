@@ -11,6 +11,8 @@ RUN export APT_CONFIG=apt.conf DEBIAN_FRONTEND=noninteractive \
     && apt-get install wget \
     && wget -q -O - ${install_deps_url} | sh
 
+ADD uname /usr/local/bin
+
 ENTRYPOINT [ "/bitbake" ]
 
 

@@ -1,0 +1,103 @@
+#!/bin/sh
+
+# Fake kernel version to something that is expected by this release
+
+OPTIONS=$(getopt -q \
+		 -o asnrvmpio \
+		 -l all \
+		 -l kernel-name \
+		 -l nodename \
+		 -l kernel-release \
+		 -l kernel-version \
+		 -l machine \
+		 -l processor \
+		 -l hardware-platform \
+		 -l operating-system \
+		 -n uname \
+		 -- $*) || exec /bin/uname ${*}
+set -- ${OPTIONS}
+options=0
+optionn=0
+optionr=0
+optionv=0
+optionn=0
+optionp=0
+optioni=0
+optiono=0
+if [ $# -eq 1 ]; then
+    options=1
+fi
+while [ $# -gt 0 ]; do
+    case ${1} in
+	"-a"|"--all")
+	    options=1
+	    optionn=1
+	    optionr=1
+	    optionv=1
+	    optionn=1
+	    optionp=1
+	    optioni=1
+	    optiono=1
+	    ;;
+	"-s"|"--kernel-name")
+	    options=1
+	    ;;
+	"-n"|"--nodename")
+	    optionn=1
+	    ;;
+	"-r"|"--kernel-release")
+	    optionr=1
+	    ;;
+	"-v"|"--kernel-version")
+	    optionv=1
+	    ;;
+	"-m"|"--machine")
+	    optionm=1
+	    ;;
+	"-p"|"--processor")
+	    optionp=1
+	    ;;
+	"-i"|"--hardware-platform")
+	    optioni=1
+	    ;;
+	"-o"|"--operating-system")
+	    optiono=1
+	    ;;
+	--)
+	    ;;
+	*)
+	    exec uname ${1}
+	    ;;
+    esac
+    shift
+done
+
+output=
+if [ ${options} -eq  1 ]; then
+    output="${output} $(uname -s)"
+fi
+if [ ${optionn} -eq  1 ]; then
+    output="${output} $(uname -n)"
+fi
+if [ ${optionr} -eq  1 ]; then
+    output="${output} 3.13.0-98-generic"
+fi
+if [ ${optionv} -eq  1 ]; then
+    output="${output} $(uname -v)"
+fi
+if [ ${optionn} -eq  1 ]; then
+    output="${output} $(uname -n)"
+fi
+if [ ${optionp} -eq  1 ]; then
+    output="${output} $(uname -p)"
+fi
+if [ ${optioni} -eq  1 ]; then
+    output="${output} $(uname -i)"
+fi
+if [ ${optiono} -eq  1 ]; then
+    output="${output} $(uname -o)"
+fi
+
+echo $(expr substr "${output}" 2 1024)
+
+exit 0
