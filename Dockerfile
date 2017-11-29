@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM phusion/baseimage:0.9.18
 
 ARG install_deps_url="http://git.multitech.net/cgi-bin/cgit.cgi/mlinux.git/plain/install-deps/install-debian-ubuntu-deps.sh?h=3"
 
@@ -13,8 +13,4 @@ RUN export APT_CONFIG=apt.conf DEBIAN_FRONTEND=noninteractive \
 
 ADD uname /usr/local/bin
 
-ENTRYPOINT [ "/bitbake" ]
-
-
-
-
+CMD ["/sbin/my_init"]

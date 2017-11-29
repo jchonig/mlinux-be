@@ -10,6 +10,6 @@ groupadd -f -g ${BUILD_GID} ${BUILD_GROUP} || exit $?
 useradd -u ${BUILD_UID} -g ${BUILD_GROUP} ${BUILD_USER} || exit $?
 
 # Run the build as the user and group invoking us
-sudo -u ${BUILD_USER} bash -c ". ./env-oe.sh ; bitbake ${*}"
+setuser ${BUILD_USER} bash -c ". ./env-oe.sh ; bitbake ${*}"
 
 echo $?
