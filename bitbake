@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Build environment must be passed
+test -n "${BUILD_DIR}" || exit $?
 cd ${BUILD_DIR} || exit $?
 
 # Ensure our group and user exists by name and number.  Bitbake
