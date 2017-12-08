@@ -13,14 +13,21 @@ CONTAINER=jchonig/mlinux-be:${MLINUX_VERSION}
 # Make sure we have the container
 docker pull ${CONTAINER} || exit $?
 
+# Start the container mounting the current directory as a volume
+CID=$(docker run -d \
+	     -v ${PWD}:${PWD} \
+	     ${CONTAINER})
+
 # It's necessary to pass our symbolic and numeric user and group info
 # to the container so the run script will work properly.
-docker run -it \
+docker exec -it \
        -e BUILD_USER=${USER} \
        -e BUILD_GROUP=$(groups | cut -d' ' -f1) \
        -e BUILD_UID=$(id -u) \
        -e BUILD_GID=$(id -g) \
        -e BUILD_DIR=${PWD} \
-       -v ${PWD}:${PWD} \
-       ${CONTAINER} \
-       ${*}
+       ${CID} /bitbake ${*}
+
+# All done, stop the container
+docker stop ${CID}
+
