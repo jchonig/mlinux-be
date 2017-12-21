@@ -8,7 +8,7 @@ case ${progname} in
 	CMD="/bitbake ${*}"
 	;;
     setup*)
-	CMD="cd ${PWD} && ./setup.sh"
+	CMD="/setup ${*}"
 	;;
     *)
 	echo "Unknown script link ${progname}" 2>&1
