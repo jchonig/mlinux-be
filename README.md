@@ -19,12 +19,11 @@ Installing and configuration docker is left as an exercize for the reader.
 The following instructions were modified from the [mLinux git README](http://git.multitech.net/cgi-bin/cgit.cgi/mlinux.git/tree/README):
 
 ```
-    # clone repo to a dir name of your choice
-    git clone git://git.multitech.net/mlinux.git mlinux-3.0.0
-    cd mlinux-3.0.0
-
-    # checkout desired branch or tag
-    git checkout 3.3.13
+# clone repo to a dir name of your choice
+$ git clone git://git.multitech.net/mlinux.git mlinux-3.0.0
+$ cd mlinux-3.0.0
+# checkout desired branch or tag
+$ git checkout 3.3.13
 ```
 ### Download the bitbake_ml script
 
@@ -38,27 +37,25 @@ $ ln -s bitbake_ml setup_ml
 
 ### Setup the build environment
 ```
-    # initialize git submodules and setup dir structure
-    setup_ml
-    # setup.sh generates a random root password, and places the
-    # password in conf/local.conf and password.txt
-    #
-    # To specify a password use an environmental variable,
-    # ROOT_PASSWORD
-    ROOT_PASSWORD="3g_t1zX0" ./setup.sh 
-    #
-    # To change the password, remove ROOT_PASSWORD and
-    # ROOT_PASSWORD_HASH from conf/local.conf and re-run:
-    ROOT_PASSWORD="Y5bG3m_2" ./setup.sh
+# initialize git submodules and setup dir structure
+$ setup_ml
+# setup.sh generates a random root password, and places the
+# password in conf/local.conf and password.txt
 
-    # set your default machine type in conf/local.conf
-    # MACHINE="mtcdt"
+# To specify a password use an environmental variable,
+# ROOT_PASSWORD
+$ ROOT_PASSWORD="3g_t1zX0" setup_ml
 
-    # build an image
-    bitbake mlinux-base-image
+# To change the password, remove ROOT_PASSWORD and
+# ROOT_PASSWORD_HASH from conf/local.conf and re-run:
+$ ROOT_PASSWORD="Y5bG3m_2" setup_ml
+
+# set your default machine type in conf/local.conf
+# MACHINE="mtcdt"
+#
+# build an image
+$ bitbake_ml mlinux-base-image
 ```
-
-
 ### Use bitbake_ml
 
 Wherever you would use
