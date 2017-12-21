@@ -25,9 +25,21 @@ The following instructions were modified from the [mLinux git README](http://git
 
     # checkout desired branch or tag
     git checkout 3.3.13
+```
+### Download the bitbake_ml script
 
+Download the bitbake_ml script, make it executable and put it in your path.
+
+```
+$ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-3/bitbake_ml
+$ chmod +x bitbake_ml
+$ ln -s bitbake_ml setup_ml
+```
+
+### Setup the build environment
+```
     # initialize git submodules and setup dir structure
-    ./setup.sh
+    setup_ml
     # setup.sh generates a random root password, and places the
     # password in conf/local.conf and password.txt
     #
@@ -46,14 +58,6 @@ The following instructions were modified from the [mLinux git README](http://git
     bitbake mlinux-base-image
 ```
 
-### Download the bitbake_ml script
-
-Download the bitbake_ml script, make it executable and put it in your path.
-
-```
-$ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-3/bitbake_ml
-$ chmod +x bitbake_ml
-```
 
 ### Use bitbake_ml
 
