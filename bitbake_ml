@@ -1,5 +1,21 @@
 #!/bin/sh
 
+progname=$(basename $0)
+
+# Figure out what we are supposed to do
+case ${progname} in
+    bitbake*)
+	CMD="/bitbake ${*}"
+	;;
+    setup*)
+	CMD="cd ${PWD} && ./setup.sh"
+	;;
+    *)
+	echo "Unknown script link ${progname}" 2>&1
+	exit 1
+	;;
+esac
+
 # Container is named mlinux-N where N is the major version
 MLINUX_VERSION=$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
 if [ -z "${MLINUX_VERSION}" ]; then
@@ -26,7 +42,7 @@ docker exec -it \
        -e BUILD_UID=$(id -u) \
        -e BUILD_GID=$(id -g) \
        -e BUILD_DIR=${PWD} \
-       ${CID} /bitbake ${*}
+       ${CID} ${CMD}
 
 # All done, stop the container
 docker stop ${CID}
