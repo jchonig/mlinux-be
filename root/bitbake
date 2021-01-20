@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -x
 
-progname=$(basename $0)
+set -x
 
 # Build environment must be passed
 test -n "${BUILD_DIR}" || exit $?
@@ -13,17 +13,23 @@ groupadd -f -g ${BUILD_GID} ${BUILD_GROUP} || exit $?
 useradd -u ${BUILD_UID} -g ${BUILD_GROUP} ${BUILD_USER} || exit $?
 
 # Figure out what we are supposed to do
-case ${progname} in
-    bitbake)
-	setuser ${BUILD_USER} bash -c ". ./env-oe.sh ; bitbake ${*}"
-	;;
-    setup*)
-	setuser ${BUILD_USER} bash -c ". ./setup.sh ${*}"
-	;;
-    *)
-	echo "Unknown script link ${progname}" 2>&1
-	exit 1
-	;;
-esac
+if [ "${1}" == "--setup" ]; then
+    shift
+    setuser ${BUILD_USER} bash -c ". ./setup.sh ${*}"
+    exit $?
+fi
 
-echo $?
+rc=-1
+for script in ./env-oe.sh ./oe-init-build-env; do
+    test -f ${script} || continue
+    setuser ${BUILD_USER} bash -c ". ${script}; bitbake ${*}"
+    rc=$?
+    break
+done
+
+if [ ${rc} -eq -1 ]; then
+    echo "Unable to find environment init script" >&2
+    rc=1
+fi
+
+exit  $?

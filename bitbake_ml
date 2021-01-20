@@ -3,38 +3,15 @@
 progname=$(basename $0)
 
 add_env () {
-    set +x
-    env | while read env; do
-	var=$(expr "${env}" : '\([^=]*\)')
-	case ${var} in
-	    SSH*|XDG*|ITERM*)
-	        ;;
-	    USER|LOGNAME|HOME|PWD|OLDPWD|PATH|_)
-	        ;;
-	    DISPLAY|PRINTER)
-	        ;;
-	    SHELL|SHLVL)
-	        ;;
-	    *)
-		echo "-e ${var}"
+    while read env; do
+	[[ ${env} =~ ([^=]+)= ]]
+	case ${BASH_REMATCH[1]} in
+	    ROOT_PASSWORD|MACHINE)
+		echo "-e ${env}"
 		;;
 	esac
-    done
+    done < <(env)
 }
-
-# Figure out what we are supposed to do
-case ${progname} in
-    bitbake*)
-	CMD="/bitbake ${*}"
-	;;
-    setup*)
-	CMD="/setup ${*}"
-	;;
-    *)
-	echo "Unknown script link ${progname}" 2>&1
-	exit 1
-	;;
-esac
 
 # Container is named mlinux-N where N is the major version
 MLINUX_VERSION=$(expr $(basename $PWD) : '\(.*-[0-9]*\)\..*')
@@ -44,27 +21,50 @@ fi
 if [ -z "${MLINUX_VERSION}" ]; then
     echo "Unable to determine mLinux version from directory name or git" >&2; exit 1
 fi
-CONTAINER=jchonig/mlinux-be:${MLINUX_VERSION}
 
-# Make sure we have the container
-docker pull ${CONTAINER} || exit $?
+IMAGE=jchonig/mlinux-be
 
-# Start the container mounting the current directory as a volume
-CID=$(docker run -d \
-	     -v ${PWD}:${PWD} \
-	     ${CONTAINER})
+while [ $# -gt 0 ]; do
+    case "${1}" in
+	--setup)
+	    progname=setup_ml
+	    shift
+	    ;;
+	--local)
+	    IMAGE=mlinux-be
+	    shift
+	    ;;
+	*)
+	    break
+	    ;;
+    esac
+done
 
+# Figure out what we are supposed to do
+case ${progname} in
+    bitbake*)
+	CMD="${*}"
+	;;
+    setup*)
+	CMD="--setup ${*}"
+	;;
+    *)
+	echo "Unknown script link ${progname}" 2>&1
+	exit 1
+	;;
+esac
+
+
+BUILD_DIR="/$(basename ${PWD})"
 # It's necessary to pass our symbolic and numeric user and group info
 # to the container so the run script will work properly.
-docker exec -it \
+docker run -it \
        -e BUILD_USER=${USER} \
        -e BUILD_GROUP=$(groups | cut -d' ' -f1) \
        -e BUILD_UID=$(id -u) \
        -e BUILD_GID=$(id -g) \
-       -e BUILD_DIR=${PWD} \
+       -e BUILD_DIR=${BUILD_DIR} \
        $(eval add_env) \
-       ${CID} ${CMD}
-
-# All done, stop the container
-docker stop ${CID}
-
+       -v ${PWD}:/${BUILD_DIR} \
+       --pull alwasy \
+       ${IMAGE}:${MLINUX_VERSION} ${CMD}

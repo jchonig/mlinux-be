@@ -1,0 +1,8 @@
+#*
+*~
+.#*
+.dockerignore
+.gcrc
+.git
+.gitignore
+.login.conf

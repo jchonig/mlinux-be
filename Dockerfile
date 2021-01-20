@@ -1,16 +1,16 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:bionic-1.0.0
 
-ARG install_deps_url="http://git.multitech.net/cgi-bin/cgit.cgi/mlinux.git/plain/install-deps/install-debian-ubuntu-deps.sh?h=3"
+ENV \
+	DEBIAN_FRONTEND=noninteractive
 
-ADD apt.conf bitbake setup /
+ADD requirements.txt /
 
 # Build the base container
-RUN export APT_CONFIG=apt.conf DEBIAN_FRONTEND=noninteractive \
-    && apt-get update \
-    && apt-get dist-upgrade \
-    && apt-get install wget \
-    && wget -q -O - ${install_deps_url} | sh
+RUN \
+	echo "*** Install required packages ***" \
+	&& apt-get update \
+	&& apt-get install --yes --fix-broken --no-install-recommends $(cat requirements.txt)
 
-ADD uname /usr/local/bin
+ADD root /
 
-CMD ["/sbin/my_init"]
+ENTRYPOINT [ "/bitbake" ]

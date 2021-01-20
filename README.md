@@ -2,11 +2,13 @@
 
 [MultiTech](https://www.multitech.com/) [mLinux](http://www.multitech.net/developer/software/mlinux/about-mlinux/) is a [Yocto Project](https://www.yoctoproject.org/) based Linux for the MultiTech Conduit family of products.
 
-## mLinux 3
-Version 3. is based on Yocto Project [1.6.1 (daisy)](https://lists.yoctoproject.org/pipermail/yocto-announce/2014-April/000045.html) which was released in 2014 and will not build on later versions of Ubuntu.
+*THIS IS CURRENTLY A WORK IN PROGRESS*
+
+## mLinux 5
+Version 5 is based on Yocto Project [2.6](https://www.yoctoproject.org/docs/2.6/ref-manual/ref-manual.html).
 
 To facilitate building this older release this containerized build
-environment based on Ubuntu 14.04.
+environment based on Ubuntu 18.04.
 
 ## Quick start
 
@@ -18,19 +20,21 @@ Installing and configuration docker is left as an exercize for the reader.
 
 The following instructions were modified from the [mLinux git README](http://git.multitech.net/cgi-bin/cgit.cgi/mlinux.git/tree/README):
 
+XXX - Update below this
+
 ```
 # clone repo to a dir name of your choice
-$ git clone git://git.multitech.net/mlinux.git mlinux-3.0.0
-$ cd mlinux-3.0.0
+$ git clone git://git.multitech.net/mlinux.git
+$ cd mlinux
 # checkout desired branch or tag
-$ git checkout 3.3.13
+$ git checkout 5.3.0d
 ```
 ### Download the bitbake_ml script
 
 Download the bitbake_ml script, make it executable and put it in your path.
 
 ```
-$ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-3/bitbake_ml
+$ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-5/bitbake_ml
 $ chmod +x bitbake_ml
 $ ln -s bitbake_ml setup_ml
 ```
