@@ -36,13 +36,12 @@ Download the bitbake_ml script, make it executable and put it in your path.
 ```
 $ wget https://raw.githubusercontent.com/jchonig/mlinux-be/mlinux-5/bitbake_ml
 $ chmod +x bitbake_ml
-$ ln -s bitbake_ml setup_ml
 ```
 
 ### Setup the build environment
 ```
 # initialize git submodules and setup dir structure
-$ setup_ml
+$ ./bitbake_ml --setup
 # setup.sh generates a random root password, and places the
 # password in conf/local.conf and password.txt
 
@@ -58,7 +57,7 @@ $ ROOT_PASSWORD="Y5bG3m_2" setup_ml
 # MACHINE="mtcdt"
 #
 # build an image
-$ bitbake_ml mlinux-base-image
+$ ./bitbake_ml mlinux-base-image
 ```
 ### Use bitbake_ml
 
