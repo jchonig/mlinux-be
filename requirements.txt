@@ -3,6 +3,7 @@ chrpath
 cmake
 cpio
 debianutils
+device-tree-compiler
 diffstat
 file
 g++-multilib
