@@ -5,6 +5,7 @@ cpio
 debianutils
 diffstat
 file
+g++-multilib
 gawk
 gcc-multilib
 git
