@@ -6,8 +6,11 @@ debianutils
 diffstat
 file
 gawk
+gcc-multilib
 git
+git-core
 iputils-ping
+libsdl1.2-dev
 make
 python
 python3
@@ -16,5 +19,7 @@ python3-pip
 qemu
 socat
 texinfo
+unzip
 wget
+xterm
 xz-utils
