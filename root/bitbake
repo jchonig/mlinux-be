@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Build environment must be passed
 test -n "${BUILD_DIR}" || exit $?
@@ -12,13 +12,12 @@ useradd -u ${BUILD_UID} -g ${BUILD_GROUP} ${BUILD_USER} || exit $?
 
 # Figure out what we are supposed to do
 if [ "${1}" == "--setup" ]; then
-    setuser ${BUILD_USER} bash -c ". ./setup.sh ${*}"
-    exit $?
+    exec setuser ${BUILD_USER} bash -c ". ./setup.sh ${*}"
 fi
 
 # Find and run our envivronment setup script
 for script in ./env-oe.sh ./oe-init-build-env; do
-    if [ test -f ${script} ]; then
+    if [ -f ${script} ]; then
 	break
     fi
 done
@@ -27,5 +26,4 @@ if [ -z "${script}" ]; then
     exit 1
 fi
 
-setuser ${BUILD_USER} bash -c ". ${script}; bitbake ${*}"
-exit $?
+exec setuser ${BUILD_USER} bash -c ". ${script}; bitbake ${*}"
