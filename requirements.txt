@@ -12,9 +12,7 @@ gcc-multilib
 git
 git-core
 iputils-ping
-libcrypto++-dev
 libsdl1.2-dev
-libssl-dev
 make
 python
 python3
@@ -27,4 +25,3 @@ unzip
 wget
 xterm
 xz-utils
-zlib1g-dev
