@@ -23,6 +23,7 @@ if [ -z "${MLINUX_VERSION}" ]; then
 fi
 
 IMAGE=jchonig/mlinux-be
+do_pull=missing
 
 while [ $# -gt 0 ]; do
     case "${1}" in
@@ -32,6 +33,10 @@ while [ $# -gt 0 ]; do
 	    ;;
 	--local)
 	    IMAGE=mlinux-be
+	    shift
+	    ;;
+	--pull)
+	    do_pull=always
 	    shift
 	    ;;
 	*)
@@ -66,5 +71,5 @@ docker run -it \
        -e BUILD_DIR=${BUILD_DIR} \
        $(eval add_env) \
        -v ${PWD}:/${BUILD_DIR} \
-       --pull alwasy \
+       --pull ${do_pull} \
        ${IMAGE}:${MLINUX_VERSION} ${CMD}
