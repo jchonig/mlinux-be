@@ -12,6 +12,7 @@ useradd -u ${BUILD_UID} -g ${BUILD_GROUP} ${BUILD_USER} || exit $?
 
 # Figure out what we are supposed to do
 if [ "${1}" == "--setup" ]; then
+    shift
     exec setuser ${BUILD_USER} bash -c ". ./setup.sh ${*}"
 fi
 
