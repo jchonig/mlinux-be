@@ -6,7 +6,7 @@ add_env () {
     while read env; do
 	[[ ${env} =~ ([^=]+)= ]]
 	case ${BASH_REMATCH[1]} in
-	    ROOT_PASSWORD|MACHINE|LANG)
+	    MTADM_PASSWORD|MACHINE|LANG)
 		echo "-e ${env}"
 		;;
 	esac
