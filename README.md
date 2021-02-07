@@ -8,7 +8,14 @@
 Version 5 is based on Yocto Project [2.6](https://www.yoctoproject.org/docs/2.6/ref-manual/ref-manual.html).
 
 To facilitate building this older release this containerized build
-environment based on Ubuntu 18.04.
+environment based on Ubuntu 16.04.
+
+Note that while Yocto 2.6 claims that Ubuntu 18.04 is a supported
+build environment, mLinux does not list it as a supported
+environment.  In addition the checks for a supported build environment
+in `layers/meta-mlinux/conf/distro/mlinux.conf` list Ubuntu 16.04, the
+casing is wrong so bitbake emits a message indicating that the build
+environment is not supported.
 
 ## Quick start
 
@@ -41,17 +48,15 @@ $ chmod +x bitbake_ml
 ### Setup the build environment
 ```
 # initialize git submodules and setup dir structure
-$ ./bitbake_ml --setup
-# setup.sh generates a random root password, and places the
-# password in conf/local.conf and password.txt
+$ MTADM_PASSWORD=<MTADM_PASSWORD> ./bitbake_ml --setup
 
-# To specify a password use an environmental variable,
-# ROOT_PASSWORD
-$ ROOT_PASSWORD="3g_t1zX0" setup_ml
+# You must specify a password as an environmental variable,
+# MTADM_PASSWORD
+$ MTADM_PASSWORD="3g_t1zX0" ./bitbake_ml --setup
 
-# To change the password, remove ROOT_PASSWORD and
-# ROOT_PASSWORD_HASH from conf/local.conf and re-run:
-$ ROOT_PASSWORD="Y5bG3m_2" setup_ml
+# To change the password, remove MTADM_PASSWORD and
+# MTADM_PASSWORD_HASH from conf/local.conf and re-run:
+$ MTADM_PASSWORD="Y5bG3m_2" ./bitbake_ml --setup
 
 # set your default machine type in conf/local.conf
 # MACHINE="mtcdt"
@@ -63,12 +68,12 @@ $ ./bitbake_ml mlinux-base-image
 
 Wherever you would use
 ```
-$ . oe-env.sh
+$ . oe-init-build-env.sh
 $ bitbake mlinux-base-image
 ```
 
 Use the bitbake_ml command instead:
 
 ```
-$ bitbake_ml mlinux-base-image
+$ ./bitbake_ml mlinux-base-image
 ```
