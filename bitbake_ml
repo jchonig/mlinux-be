@@ -59,8 +59,23 @@ case ${progname} in
 	;;
 esac
 
-
 BUILD_DIR="/$(basename ${PWD})"
+
+# Find any linked layers and mount them as volumes
+VOLUMES="-v ${PWD}:${BUILD_DIR}"
+for layer in $(find layers -maxdepth 1 -type l); do
+    layer_base=$(basename ${layer})
+    layer_src=$(readlink -f ${layer})
+    layer_mp="${BUILD_DIR}/layers/${layer_base}"
+    VOLUMES="${VOLUMES} -v ${layer_src}:${layer_mp}"
+    # Ensure the layers are in the bblayers.conf file
+    if [ -e build/conf/bblayers.conf ]; then
+	if ! grep -q "${layer_mp}" build/conf/bblayers.conf; then
+	    sed -i -e "\%${BUILD_DIR}/layers/user-layer%a\\" -e "			${layer_mp} \\\\" build/conf/bblayers.conf
+	fi
+    fi
+done
+
 # It's necessary to pass our symbolic and numeric user and group info
 # to the container so the run script will work properly.
 docker run -it \
@@ -70,6 +85,6 @@ docker run -it \
        -e BUILD_GID=$(id -g) \
        -e BUILD_DIR=${BUILD_DIR} \
        $(eval add_env) \
-       -v ${PWD}:/${BUILD_DIR} \
+       ${VOLUMES} \
        --pull ${do_pull} \
        ${IMAGE}:${MLINUX_VERSION} ${CMD}
